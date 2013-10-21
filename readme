@@ -1,0 +1,8 @@
+p3din2obj
+=========
+
+A Python 2.x script to convert binary files from http://p3d.in/ to .obj model files.
+
+At the moment it only has support for models that use exclusively faces with vertices and uvs (both triangles and quads), althought it would be trivial to extend it to fully support the format.
+
+I've only tested with a single models, so you should expect minor troubles when using it.
