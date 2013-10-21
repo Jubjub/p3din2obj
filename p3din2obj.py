@@ -2,7 +2,7 @@ import struct
 
 def main():
     print 'started'
-    data = open('test.bin').read()
+    data = open('test.bin', 'rb').read()
     cursor = 0
     # start parsing
     header = struct.unpack('12sxxxxxxxxIIIIIIIIIII', data[cursor:0x40])
@@ -21,17 +21,21 @@ def main():
     quad_faces_pn = header[9]
     quad_faces_pu = header[10]
     quad_faces_pun = header[11]
-
+    # print debug data
     print 'version %s' % header[0]
     print '%s vertices' % vertex_count
     print '%s normals' % normal_count
     print '%s uvs' % uv_count
     print '%s total tris' % (tri_faces_p + tri_faces_pn + tri_faces_pu + tri_faces_pun)
     print '%s total quads' % (quad_faces_p + quad_faces_pn + quad_faces_pu + quad_faces_pun)
-
     print 'parsed header'
-
-    
+    # parse vertices
+    vertices = []
+    for i in range(vertex_count):
+        vertex = struct.unpack('fff', data[cursor:cursor + 4 * 3])
+        cursor += 4 * 3
+        vertices.append(vertex)
+    print 'successfully parsed %s vertices' % len(vertices)
 
 if __name__ == '__main__':
     main()
