@@ -36,6 +36,20 @@ def main():
         cursor += 4 * 3
         vertices.append(vertex)
     print 'successfully parsed %s vertices' % len(vertices)
+    # parse normals
+    normals = []
+    for i in range(normal_count):
+        vertex = struct.unpack('fff', data[cursor:cursor + 4 * 3])
+        cursor += 4 * 3
+        normals.append(vertex)
+    print 'successfully parsed %s normals' % len(normals)
+    # parse uvs
+    uvs = []
+    for i in range(uv_count):
+        vertex = struct.unpack('ff', data[cursor:cursor + 4 * 2])
+        cursor += 4 * 2
+        uvs.append(vertex)
+    print 'successfully parsed %s uvs' % len(uvs)
 
 if __name__ == '__main__':
     main()
