@@ -66,7 +66,9 @@ def main():
             tri_faces[i].append(indices)
             cursor += 4 * 3
         for i in range(tri_faces_pu):
-            tri_faces[i].append(struct.unpack('III', data[cursor:cursor + 4 * 3]))
+            indices = struct.unpack('III', data[cursor:cursor + 4 * 3])
+            indices = (indices[0] + 1, indices[1] + 1, indices[2] + 1)
+            tri_faces[i].append(indices)
             cursor += 4 * 3
         for i in range(tri_faces_pu):
             # empty normal
@@ -81,7 +83,9 @@ def main():
             quad_faces[i].append(indices)
             cursor += 4 * 4
         for i in range(quad_faces_pu):
-            quad_faces[i].append(struct.unpack('IIII', data[cursor:cursor + 4 * 4]))
+            indices = struct.unpack('IIII', data[cursor:cursor + 4 * 4])
+            indices = (indices[0] + 1, indices[1] + 1, indices[2] + 1, indices[3] + 1)
+            quad_faces[i].append(indices)
             cursor += 4 * 4
         for i in range(quad_faces_pu):
             # empty normal
@@ -110,7 +114,7 @@ def main():
     # write uvs
     n = 0
     for uv in uvs:
-        obj.write('vp %s %s\n' % uv)
+        obj.write('vt %s %s\n' % uv)
         n += 1
     print 'wrote %s uvs' % n
     # write tri pu faces
