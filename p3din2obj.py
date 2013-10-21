@@ -47,6 +47,7 @@ def main():
     uvs = []
     for i in range(uv_count):
         vertex = struct.unpack('ff', data[cursor:cursor + 4 * 2])
+        vertex = (vertex[0], 1.0 - vertex[1])
         cursor += 4 * 2
         uvs.append(vertex)
     print 'successfully parsed %s uvs' % len(uvs)
@@ -74,7 +75,7 @@ def main():
             # empty normal
             tri_faces[i].append(())
         # skip materials
-        #cursor += tri_faces_pu * 3 * 4
+        cursor += tri_faces_pu * 2
         print 'parsing quad_pu type faces'
         for i in range(quad_faces_pu):
             quad_faces.append([])
@@ -91,7 +92,7 @@ def main():
             # empty normal
             quad_faces[i].append(())
         # skip materials
-        #cursor += quad_faces_pu * 8 * 4
+        cursor += quad_faces_pu * 2
             
     if tri_faces_pun > 0 or quad_faces_pun > 0:
         raise Exception('not implemented')
