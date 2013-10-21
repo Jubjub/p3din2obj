@@ -50,15 +50,15 @@ def main():
         cursor += 4 * 2
         uvs.append(vertex)
     print 'successfully parsed %s uvs' % len(uvs)
-    # parse tri faces
+    # parse faces
     tri_faces = []
-    # (unfinished)
+    quad_faces = []
     if tri_faces_p > 0 or quad_faces_p > 0:
         raise Exception('not implemented') 
     if tri_faces_pn > 0 or quad_faces_pn > 0:
         raise Exception('not implemented')
     if tri_faces_pu > 0 or quad_faces_pu > 0:
-        print 'parsing pu type faces'
+        print 'parsing tri_pu type faces'
         for i in range(tri_faces_pu):
             tri_faces.append([])
             indices = struct.unpack('III', data[cursor:cursor + 4 * 3])
@@ -72,7 +72,22 @@ def main():
             # empty normal
             tri_faces[i].append(())
         # skip materials
-        cursor += tri_faces_pu * 6 * 4
+        #cursor += tri_faces_pu * 3 * 4
+        print 'parsing quad_pu type faces'
+        for i in range(quad_faces_pu):
+            quad_faces.append([])
+            indices = struct.unpack('IIII', data[cursor:cursor + 4 * 4])
+            indices = (indices[0] + 1, indices[1] + 1, indices[2] + 1, indices[3] + 1)
+            quad_faces[i].append(indices)
+            cursor += 4 * 4
+        for i in range(quad_faces_pu):
+            quad_faces[i].append(struct.unpack('IIII', data[cursor:cursor + 4 * 4]))
+            cursor += 4 * 4
+        for i in range(quad_faces_pu):
+            # empty normal
+            quad_faces[i].append(())
+        # skip materials
+        #cursor += quad_faces_pu * 8 * 4
             
     if tri_faces_pun > 0 or quad_faces_pun > 0:
         raise Exception('not implemented')
@@ -103,6 +118,13 @@ def main():
     for f in tri_faces:
         obj.write('f %s/%s %s/%s %s/%s\n' % (f[0][0], f[1][0], f[0][1],
             f[1][1], f[0][2], f[1][2]))
+        n += 1
+    print 'wrote %s tri pu faces' % n
+    # write quad pu faces
+    n = 0
+    for f in quad_faces:
+        obj.write('f %s/%s %s/%s %s/%s %s/%s\n' % (f[0][0], f[1][0], f[0][1],
+            f[1][1], f[0][2], f[1][2], f[0][3], f[1][3]))
         n += 1
     print 'wrote %s tri pu faces' % n
     # finished
